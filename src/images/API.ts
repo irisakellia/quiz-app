@@ -16,4 +16,5 @@ const fetchQuizQuestions = async (amount:number , difficulty:Difficulty)=>{
     console.log(data);
 }
 
+export {fetchQuizQuestions}
 
