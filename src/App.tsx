@@ -3,13 +3,13 @@ import './App.css';
 import QuestionCard from './components/QuestionCard'
 import { useTheme } from 'styled-components';
 import {fetchQuizQuestions} from './images/API';
-import { Difficulty } from './images/API';
+import { QuestionState,Difficulty } from './images/API';
 
 const TOTAL_QUESTIONS = 10 ;
 
 const App=()=> {
   const[loading, setLoading] = useState(false);
-  const[questions, setQuestions] = useState([]);
+  const[questions, setQuestions] = useState<QuestionState[]>([]);
   const[number,setNumber] = useState(0);
   const[userAnswers,setUserAnswers] = useState([]);
   const[Score, setScore] = useState(0);
