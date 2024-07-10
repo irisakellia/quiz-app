@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import './App.css';
 import QuestionCard from './components/QuestionCard'
 import { fetchQuizQuestions, QuestionsState, Difficulty } from './images/API';
+import { GlobalStyle } from './app.styles';
+
+
 
 type AnswerObject = {
   question: string;
@@ -58,6 +61,8 @@ const App = () => {
   }
 
   return (
+    <>
+    <GlobalStyle/>
     <div className='App'>
       <h1>REACT QUIZ</h1>
       {gameOver || userAnswers.length === TOTAL_QUESTIONS ? (
@@ -78,7 +83,7 @@ const App = () => {
       {!gameOver && !loading && userAnswers.length === number + 1 && number !== TOTAL_QUESTIONS - 1 ? (
         <button className='next' onClick={nextQuestion}>Next</button>
       ) : null}
-    </div>
+    </div></>
   );
 }
 
