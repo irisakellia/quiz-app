@@ -20,8 +20,6 @@ const App = () => {
   const [score, setScore] = useState(0);
   const [gameOver, setGameOver] = useState(true);
 
-  console.log(fetchQuizQuestions(TOTAL_QUESTIONS, Difficulty.EASY));
-
   const startTrivia = async () => {
     setLoading(true);
     setGameOver(false);
@@ -37,14 +35,14 @@ const App = () => {
   const checkAnswer = (e: React.MouseEvent<HTMLButtonElement>) => {
     if (!gameOver) {
       const answer = e.currentTarget.value;
-      const correct = questions[number].correct_answer === answer;
+      const correct = questions[number]?.correct_answer === answer;
       if (correct) setScore(prev => prev + 1);
 
       const answerObject = {
-        question: questions[number].question,
+        question: questions[number]?.question || '',
         answer,
         correct,
-        correctAnswer: questions[number].correct_answer,
+        correctAnswer: questions[number]?.correct_answer || '',
       };
       setUserAnswers(prev => [...prev, answerObject]);
     }
@@ -67,7 +65,7 @@ const App = () => {
       ) : null}
       {!gameOver ? <p className='score'>Score: {score}</p> : null}
       {loading ? <p>Loading Questions ...</p> : null}
-      {!loading && !gameOver && (
+      {!loading && !gameOver && questions.length > 0 && (
         <QuestionCard
           questionNr={number + 1}
           totalQuestions={TOTAL_QUESTIONS}

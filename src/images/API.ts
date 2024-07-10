@@ -1,4 +1,4 @@
-import { shuffleArray } from './utils';
+import { shuffleArray } from "./utils";
 
 export type Question = {
   category: string;
@@ -7,7 +7,9 @@ export type Question = {
   incorrect_answers: string[];
   question: string;
   type: string;
-};
+}
+
+export type QuestionsState = Question & { answers: string[] };
 
 export enum Difficulty {
   EASY = "easy",
@@ -15,13 +17,28 @@ export enum Difficulty {
   HARD = "hard",
 }
 
-export type QuestionsState = Question & { answers: string[] };
-
 export const fetchQuizQuestions = async (amount: number, difficulty: Difficulty): Promise<QuestionsState[]> => {
   const endpoint = `https://opentdb.com/api.php?amount=${amount}&difficulty=${difficulty}&type=multiple`;
-  const data = await (await fetch(endpoint)).json();
-  return data.results.map((question: Question) => ({
-    ...question,
-    answers: shuffleArray([...question.incorrect_answers, question.correct_answer])
-  }))
-};
+
+  try {
+    const response = await fetch(endpoint);
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+
+    const data = await response.json();
+
+    if (!data.results || !Array.isArray(data.results)) {
+      throw new Error('Unexpected API response format');
+    }
+
+    return data.results.map((question: Question) => ({
+      ...question,
+      answers: shuffleArray([...question.incorrect_answers, question.correct_answer]),
+    }));
+
+  } catch (error) {
+    console.error('Fetch error: ', error);
+    return []; // Return an empty array in case of an error
+  }
+}
